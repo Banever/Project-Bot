@@ -10,6 +10,7 @@ public class Basemovement : MonoBehaviour
     [SerializeField]
     private float Velocidad;
     private float moveinput;
+    bool facingRight;
 
     [Header("GroundCheck")]//Groundcheck para salto y demas
     private bool IsGrounded;
@@ -86,7 +87,16 @@ public class Basemovement : MonoBehaviour
                 Extrajumpsvalue -= 1;
                 Jumptimecounter -= Time.deltaTime;
                 Rigidbody.velocity = Vector2.up * Jumpheight;           
-        }        
+        }
+        
+        if(moveinput > 0 && facingRight)
+        {
+            Flip();
+        }
+        if (moveinput < 0 && !facingRight)
+        {
+            Flip();
+        }
     }
 
     //Deslizamiento
@@ -107,8 +117,16 @@ public class Basemovement : MonoBehaviour
         Velocidad = 11f;
         //Jumpheight = 20f;
         yield return new WaitForSeconds(Dashcooldown);
-        Candash = true;
+        Candash = true;        
+    }
 
+    void Flip()
+    {
+        Vector3 currentscale = gameObject.transform.localScale;
+        currentscale.x *= -1;
+        gameObject.transform.localScale = currentscale;
+
+        facingRight = !facingRight;
     }
 
 }
